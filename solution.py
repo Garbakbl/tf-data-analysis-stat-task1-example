@@ -3,7 +3,7 @@ from scipy.stats import lognorm
 from scipy.optimize import minimize
 
 
-chat_id = 356550601 # Ваш chat ID, не меняйте название переменной
+chat_id = 356550601
 
 def solution(x: np.array) -> float:
     def log_likelihood(alpha, sigma_sq, x):
