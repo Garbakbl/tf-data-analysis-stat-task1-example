@@ -1,11 +1,13 @@
-import pandas as pd
 import numpy as np
+from scipy.stats import lognorm
+from scipy.optimize import minimize
 
 
-chat_id = 123456 # Ваш chat ID, не меняйте название переменной
+chat_id = 356550601 # Ваш chat ID, не меняйте название переменной
 
 def solution(x: np.array) -> float:
-    # Измените код этой функции
-    # Это будет вашим решением
-    # Не меняйте название функции и её аргументы
-    return x.mean() # Ваш ответ
+    def log_likelihood(alpha, sigma_sq, x):
+        return np.sum(np.log(251 + lognorm(sigma_sq, scale=np.exp(alpha)).pdf(x)))
+
+    result = minimize(lambda params: -log_likelihood(*params, x), [0, 1])
+    return result.x[0]
