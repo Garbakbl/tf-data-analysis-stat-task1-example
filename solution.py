@@ -1,13 +1,12 @@
 import numpy as np
-from scipy.stats import lognorm
 from scipy.optimize import minimize
-
 
 chat_id = 356550601
 
-def solution(x: np.array) -> float:
-    def log_likelihood(alpha, sigma_sq, x):
-        return np.sum(np.log(251 + lognorm(sigma_sq, scale=np.exp(alpha)).pdf(x)))
+def solution(checks):
+    def negative_log_likelihood(params, checks):
+        alpha, sigma_sq = params
+        return -np.sum(251 + np.log(1 / (checks * np.sqrt(2 * np.pi * sigma_sq))) - ((np.log(checks) - alpha) ** 2) / (2 * sigma_sq))
 
-    result = minimize(lambda params: -log_likelihood(*params, x), [0, 1])
-    return result.x[0]
+    res = minimize(negative_log_likelihood, (0, 1), args=checks, method='Nelder-Mead')
+    return res.x[0]
